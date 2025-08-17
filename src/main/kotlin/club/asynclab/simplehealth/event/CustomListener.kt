@@ -1,7 +1,7 @@
-package club.asynclab.simpleHealth.event
+package club.asynclab.simplehealth.event
 
-import club.asynclab.simpleHealth.SimpleHealth
-import club.asynclab.simpleHealth.misc.Indicator
+import club.asynclab.simplehealth.SimpleHealth
+import club.asynclab.simplehealth.misc.Indicator
 import com.destroystokyo.paper.event.server.ServerTickEndEvent
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch

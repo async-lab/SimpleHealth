@@ -1,5 +1,5 @@
 name: SimpleHealth
 version: '${version}'
-main: club.asynclab.simpleHealth.SimpleHealth
+main: club.asynclab.simplehealth.SimpleHealth
 api-version: '1.21'
 depend: [ Kotlin ]

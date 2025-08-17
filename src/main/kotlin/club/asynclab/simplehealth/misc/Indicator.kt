@@ -1,4 +1,4 @@
-package club.asynclab.simpleHealth.misc
+package club.asynclab.simplehealth.misc
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor

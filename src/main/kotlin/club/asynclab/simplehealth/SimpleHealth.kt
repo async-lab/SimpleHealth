@@ -1,6 +1,6 @@
-package club.asynclab.simpleHealth
+package club.asynclab.simplehealth
 
-import club.asynclab.simpleHealth.event.CustomListener
+import club.asynclab.simplehealth.event.CustomListener
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
