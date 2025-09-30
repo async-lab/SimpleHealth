@@ -7,7 +7,6 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import kotlin.math.ceil
-import kotlin.math.min
 
 object Indicator {
     private val miniMessage = MiniMessage.miniMessage()
@@ -21,7 +20,7 @@ object Indicator {
     fun render(player: Player, entity: LivingEntity) {
         val health = ceil(entity.health).toInt()
         val maxHealth = entity.getAttribute(Attribute.MAX_HEALTH)?.value ?: return
-        val rate = min(1.0, health / maxHealth)
+        val rate = (health / maxHealth).coerceIn(0.0, 1.0)
 
         val entityNameComponent = when {
             entity.customName() != null -> entity.customName()!!
