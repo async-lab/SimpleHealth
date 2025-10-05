@@ -3,10 +3,7 @@ name: snapshot
 on:
   push:
     branches:
-      - mc*/dev
-  pull_request:
-    branches:
-      - mc*/dev
+      - main
 
 jobs:
   publish:
