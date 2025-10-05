@@ -13,7 +13,7 @@ object Indicator {
 
     fun trace(player: Player): LivingEntity? {
         val range = player.getAttribute(Attribute.ENTITY_INTERACTION_RANGE)?.value ?: return null
-        val entity = player.rayTraceEntities(range.toInt())?.hitEntity as? LivingEntity ?: return null
+        val entity = player.getTargetEntity(range.toInt()) as? LivingEntity ?: return null
         return entity
     }
 
