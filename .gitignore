@@ -3,3 +3,5 @@ build/
 .idea/
 .vscode/
 .gradle/
+.omo/
+.kotlin/

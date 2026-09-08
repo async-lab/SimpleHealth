@@ -1,11 +1,11 @@
 plugins {
-    kotlin("jvm") version "2.2.20-Beta2"
-    id("com.gradleup.shadow") version "8.3.0"
-    id("xyz.jpenilla.run-paper") version "2.3.1"
+    kotlin("jvm") version "2.4.20"
+    id("com.gradleup.shadow") version "9.6.1"
+    id("xyz.jpenilla.run-paper") version "3.1.0"
 }
 
 group = "club.asynclab"
-version = "1.0"
+val minecraftVersion = providers.gradleProperty("minecraftVersion").get()
 
 repositories {
     mavenCentral()
@@ -14,12 +14,12 @@ repositories {
     }
 }
 
-val shade: Configuration by configurations.creating
+val shade = configurations.create("shade")
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
+    compileOnly("io.papermc.paper:paper-api:26.2.build.121-stable")
+    implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0")
 }
 
 tasks {
@@ -27,11 +27,11 @@ tasks {
         // Configure the Minecraft version for our task.
         // This is the only required configuration besides applying the plugin.
         // Your plugin's jar (or shadowJar if present) will be used automatically.
-        minecraftVersion("1.21.8")
+        minecraftVersion(minecraftVersion)
     }
 }
 
-val targetJavaVersion = 21
+val targetJavaVersion = 25
 kotlin {
     jvmToolchain(targetJavaVersion)
 }
