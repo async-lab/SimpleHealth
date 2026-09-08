@@ -2,9 +2,9 @@ name: stable
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 permissions:
   contents: write
@@ -65,7 +65,7 @@ jobs:
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
         with:
-          project_id: ${{ vars.MODRINTH_PROJECT_ID }}
+          project_id: jknnAzLU
           name: ${{ steps.version.outputs.version }}
           version_number: ${{ steps.version.outputs.version }}
           version_type: release
@@ -73,3 +73,4 @@ jobs:
           loaders: paper
           game_versions: ${{ steps.version.outputs.minecraft_version }}
           files: build/libs/SimpleHealth-${{ steps.version.outputs.version }}-all.jar
+          dependencies: 5Z9kTs3P:required
