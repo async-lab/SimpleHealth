@@ -1,53 +1,50 @@
 package club.asynclab.simplehealth.event
 
-import club.asynclab.simplehealth.SimpleHealth
 import club.asynclab.simplehealth.misc.Indicator
 import com.destroystokyo.paper.event.server.ServerTickEndEvent
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
 import org.bukkit.Bukkit
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
+import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageByEntityEvent
-import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
+import java.util.*
 
 
-class CustomListener(private val plugin: SimpleHealth) : Listener {
+class CustomListener : Listener {
+    private val pendingHits = mutableMapOf<UUID, EntityDamageByEntityEvent>()
+
     @EventHandler
     fun onTick(event: ServerTickEndEvent) {
-        Bukkit.getServer().onlinePlayers.forEach { player ->
-            plugin.playerChannels[player.uniqueId]?.trySend {
-                Indicator.render(player, Indicator.trace(player) ?: return@trySend)
+        try {
+            Bukkit.getServer().onlinePlayers.forEach { player ->
+                // Damage has settled; a hit takes priority over aim for this tick only.
+                val hit = pendingHits.remove(player.uniqueId)?.takeUnless { it.isCancelled }
+                val target = (hit?.entity as? LivingEntity)?.takeIf { it.isValid || it.isDead }
+                    ?: Indicator.trace(player)?.takeIf { it.isValid || it.isDead }
+                    ?: return@forEach
+                Indicator.render(player, target)
             }
+        } finally {
+            this.clear()
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     fun onAttack(event: EntityDamageByEntityEvent) {
         val player = event.damageSource.causingEntity as? Player ?: return
-        val entity = event.entity as? LivingEntity ?: return
-
-        plugin.playerChannels[player.uniqueId]?.trySend {
-            Indicator.render(player, entity)
-        }
-    }
-
-    @EventHandler
-    fun onPlayerJoin(event: PlayerJoinEvent) {
-        val channel = Channel<() -> Unit>()
-        plugin.playerChannels[event.player.uniqueId] = channel
-        plugin.scope.launch {
-            for (f in channel) {
-                f()
-            }
-        }
+        if (!player.isOnline || event.entity !is LivingEntity) return
+        pendingHits[player.uniqueId] = event
     }
 
     @EventHandler
     fun onPlayerQuit(event: PlayerQuitEvent) {
-        plugin.playerChannels.remove(event.player.uniqueId)?.close()
+        pendingHits.remove(event.player.uniqueId)
+    }
+
+    fun clear() {
+        pendingHits.clear()
     }
 }
