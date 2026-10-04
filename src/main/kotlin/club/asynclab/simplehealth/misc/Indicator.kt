@@ -30,7 +30,7 @@ object Indicator {
         val formattedRate = "%.4f".format(Locale.ROOT, rate)
         val healthValue = if (entity.isDead) "☠" else "❤ $health"
         val healthComponent =
-            miniMessage.deserialize("<transition:red:yellow:green:$formattedRate>$healthValue</transition>")
+            this.miniMessage.deserialize("<transition:red:yellow:green:$formattedRate>$healthValue</transition>")
 
         val actionBarComponent = Component.text()
             .append(entityNameComponent)

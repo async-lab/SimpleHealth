@@ -21,7 +21,7 @@ class CustomListener : Listener {
         try {
             Bukkit.getServer().onlinePlayers.forEach { player ->
                 // Damage has settled; a hit takes priority over aim for this tick only.
-                val hit = pendingHits.remove(player.uniqueId)?.takeUnless { it.isCancelled }
+                val hit = this.pendingHits.remove(player.uniqueId)?.takeUnless { it.isCancelled }
                 val target = (hit?.entity as? LivingEntity)?.takeIf { it.isValid || it.isDead }
                     ?: Indicator.trace(player)?.takeIf { it.isValid || it.isDead }
                     ?: return@forEach
@@ -36,15 +36,15 @@ class CustomListener : Listener {
     fun onAttack(event: EntityDamageByEntityEvent) {
         val player = event.damageSource.causingEntity as? Player ?: return
         if (!player.isOnline || event.entity !is LivingEntity) return
-        pendingHits[player.uniqueId] = event
+        this.pendingHits[player.uniqueId] = event
     }
 
     @EventHandler
     fun onPlayerQuit(event: PlayerQuitEvent) {
-        pendingHits.remove(event.player.uniqueId)
+        this.pendingHits.remove(event.player.uniqueId)
     }
 
     fun clear() {
-        pendingHits.clear()
+        this.pendingHits.clear()
     }
 }
