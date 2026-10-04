@@ -2,9 +2,9 @@ name: snapshot
 
 on:
   push:
-    branches: [dev]
+    branches: [ dev ]
   pull_request:
-    branches: [dev]
+    branches: [ dev ]
 
 permissions:
   contents: write
@@ -44,7 +44,7 @@ jobs:
 
       - name: Update snapshot release
         if: github.event_name == 'push'
-        uses: andelf/nightly-release@v1
+        uses: andelf/nightly-release@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -53,3 +53,4 @@ jobs:
           prerelease: true
           body: ${{ steps.changelog.outputs.changelog }}
           files: build/libs/*-all.jar
+          only-when-changed: false
